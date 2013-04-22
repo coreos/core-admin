@@ -19,8 +19,11 @@ func init() {
 }
 
 func runHash(cmd *Command, args []string) {
-	if len(args) != 0 {
+	if len(args) != 1 {
+		fmt.Println("ERROR: password argument expected")
+		return
 	}
+
 	hash, _ := bcrypt.GenerateFromPassword([]byte(args[0]), 10)
 	fmt.Println(string(hash))
 	return
