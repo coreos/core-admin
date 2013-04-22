@@ -11,8 +11,8 @@ import (
 	"text/template"
 )
 
-// A Command is an implementation of a reup command
-// like reup build or reup fix.
+// A Command is an implementation of a core-admin command
+// like core-admin build or core-admin fix.
 type Command struct {
 	// Run runs the command.
 	// The args are the arguments after the command name.
@@ -22,10 +22,10 @@ type Command struct {
 	// The first word in the line is taken to be the command name.
 	UsageLine string
 
-	// Short is the short description shown in the 'reup help' output.
+	// Short is the short description shown in the 'core-admin help' output.
 	Short string
 
-	// Long is the long message shown in the 'reup help <this-command>' output.
+	// Long is the long message shown in the 'core-admin help <this-command>' output.
 	Long string
 
 	// Flag is a set of flags specific to this command.
@@ -59,7 +59,7 @@ func (c *Command) Runnable() bool {
 }
 
 // Commands lists the available commands and help topics.
-// The order here is the order in which they are printed by 'reup help'.
+// The order here is the order in which they are printed by 'core-admin help'.
 var commands = []*Command{
 	cmdHash,
 	cmdNewVersion,
@@ -106,25 +106,25 @@ func main() {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "go: unknown subcommand %q\nRun 'reup help' for usage.\n", args[0])
+	fmt.Fprintf(os.Stderr, "go: unknown subcommand %q\nRun 'core-admin help' for usage.\n", args[0])
 	setExitStatus(2)
 	exit()
 }
 
-var usageTemplate = `reup is a tool for administering the core-update service
+var usageTemplate = `core-admin is a tool for administering the core-update service
 
 Usage:
 
-	reup command [arguments]
+	core-admin command [arguments]
 
 The commands are:
 {{range .}}{{if .Runnable}}
     {{.Name | printf "%-11s"}} {{.Short}}{{end}}{{end}}
 
-Use "reup help [command]" for more information about a command.
+Use "core-admin help [command]" for more information about a command.
 `
 
-var helpTemplate = `{{if .Runnable}}usage: reup {{.UsageLine}}
+var helpTemplate = `{{if .Runnable}}usage: core-admin {{.UsageLine}}
 
 {{end}}{{.Long | trim}}
 `
@@ -152,12 +152,12 @@ func usage() {
 func help(args []string) {
 	if len(args) == 0 {
 		printUsage(os.Stdout)
-		// not exit 2: succeeded at 'reup help'.
+		// not exit 2: succeeded at 'core-admin help'.
 		return
 	}
 	if len(args) != 1 {
-		fmt.Fprintf(os.Stderr, "usage: reup help command\n\nToo many arguments given.\n")
-		os.Exit(2) // failed at 'reup help'
+		fmt.Fprintf(os.Stderr, "usage: core-admin help command\n\nToo many arguments given.\n")
+		os.Exit(2) // failed at 'core-admin help'
 	}
 
 	arg := args[0]
@@ -165,13 +165,13 @@ func help(args []string) {
 	for _, cmd := range commands {
 		if cmd.Name() == arg {
 			tmpl(os.Stdout, helpTemplate, cmd)
-			// not exit 2: succeeded at 'reup help cmd'.
+			// not exit 2: succeeded at 'core-admin help cmd'.
 			return
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "Unknown help topic %#q.  Run 'reup help'.\n", arg)
-	os.Exit(2) // failed at 'reup help cmd'
+	fmt.Fprintf(os.Stderr, "Unknown help topic %#q.  Run 'core-admin help'.\n", arg)
+	os.Exit(2) // failed at 'core-admin help cmd'
 }
 
 var atexitFuncs []func()
