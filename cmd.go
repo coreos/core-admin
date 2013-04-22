@@ -1,4 +1,4 @@
-package reup
+package main
 
 import (
 	"flag"

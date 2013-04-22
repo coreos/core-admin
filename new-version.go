@@ -1,4 +1,4 @@
-package reup
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"crypto/sha256"
 	"os"
 	"io"
-	"reup/web"
+	"bitbucket.org/coreos/core-update/types"
 )
 
 var cmdNewVersion = &Command{
@@ -22,7 +22,7 @@ func init() {
 	cmdNewVersion.Run = runNewVersion
 }
 
-func calculateHashes(filename string, pkg *web.Package) (names []string, hashes []hash.Hash)  {
+func calculateHashes(filename string, pkg *types.Package) (names []string, hashes []hash.Hash)  {
 	var (
 		writers []io.Writer
 	)
@@ -48,8 +48,8 @@ func calculateHashes(filename string, pkg *web.Package) (names []string, hashes 
 }
 
 func runNewVersion(cmd *Command, args []string) {
-	app := web.App{}
-	pkg := web.Package{}
+	app := types.App{}
+	pkg := types.Package{}
 	_, hashes := calculateHashes(args[0], &pkg)
 
 	for i := 0; i < len(hashes); i++ {
