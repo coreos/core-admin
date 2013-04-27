@@ -1,8 +1,16 @@
+// Package types is where exportable API structures go. This is so we can share
+// the XML marshalling and unmarshalling with core-admin
 package types
 
 import (
 	"encoding/xml"
 )
+
+type Version struct {
+	XMLName xml.Name `xml:"version"`
+	App     *App     `xml:"app"`
+	Package *Package `xml:"package"`
+}
 
 type App struct {
 	XMLName xml.Name `xml:"app"`
