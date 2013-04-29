@@ -2,13 +2,16 @@ package main
 
 import (
 	"bitbucket.org/coreos/core-update/types"
+	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/xml"
-	"flag"
 	"fmt"
 	"hash"
 	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -22,13 +25,13 @@ Takes a file path and some meta data and update the information used in the data
 	`,
 }
 
-var dryRun = flag.Bool("d", false, "dry run, print out the xml payload")
-var key = flag.String("k", "", "api key for the admin user")
+var dryRun = cmdNewVersion.Flag.Bool("d", false, "dry run, print out the xml payload")
+var key = cmdNewVersion.Flag.String("k", "", "api key for the admin user")
 
-var appId = flag.String("a", "", "application id")
-var version = flag.String("v", "", "version ")
-var track = flag.String("t", "", "track")
-var path = flag.String("p", "", "url path")
+var appId = cmdNewVersion.Flag.String("a", "", "application id")
+var version = cmdNewVersion.Flag.String("v", "", "version ")
+var track = cmdNewVersion.Flag.String("t", "", "track")
+var path = cmdNewVersion.Flag.String("p", "", "url path")
 
 func init() {
 	cmdNewVersion.Run = runNewVersion
@@ -64,14 +67,6 @@ func calculateHashes(filename string, pkg *types.Package) {
 	pkg.Sha1Sum = formatHash(hashes[1])
 }
 
-func runDryRun(payload []byte) {
-	//w.Header().Add("Content-Type", "text/xml")
-	fmt.Printf("POST %s\n\n", updateURL.String())
-	fmt.Fprint(os.Stdout, xml.Header)
-	os.Stdout.Write(payload)
-	fmt.Printf("\n")
-}
-
 func runNewVersion(cmd *Command, args []string) {
 	if *dryRun == false && *key == "" {
 		fmt.Printf("key or dry-run required")
@@ -98,11 +93,45 @@ func runNewVersion(cmd *Command, args []string) {
 	ver := types.Version{App: &app, Package: &pkg}
 	calculateHashes(file, ver.Package)
 
-	if raw, err := xml.MarshalIndent(ver, "", " "); err != nil {
+	raw, err := xml.MarshalIndent(ver, "", " ")
+	if err != nil {
 		fmt.Printf(err.Error())
 		os.Exit(-1)
-	} else {
-		runDryRun(raw)
+	}
+
+	body := []byte(xml.Header)
+	body = append(body, raw...)
+
+	adminURL, _ := url.Parse(updateURL.String())
+	adminURL.Path = "/admin"
+
+	req, _ := http.NewRequest("POST", adminURL.String(), bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "text/xml")
+	req.SetBasicAuth("admin", *key)
+
+	if *dryRun || *debug {
+		req.Write(os.Stdout)
+	}
+
+	if *dryRun {
+		return
+	}
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+
+	if err != nil {
+		fmt.Printf(err.Error())
+		os.Exit(-1)
+	}
+
+	body, _ = ioutil.ReadAll(resp.Body)
+	os.Stdout.Write(body)
+	fmt.Printf("\n")
+
+	if resp.StatusCode != 200 {
+		fmt.Printf("Error: bad return code %s\n", resp.Status)
+		os.Exit(-1)
 	}
 
 	return

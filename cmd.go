@@ -11,6 +11,8 @@ import (
 	"text/template"
 )
 
+var debug = flag.Bool("debug", false, "debug flag")
+
 // A Command is an implementation of a core-admin command
 // like core-admin build or core-admin fix.
 type Command struct {
