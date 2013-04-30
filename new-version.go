@@ -79,6 +79,11 @@ func runNewVersion(cmd *Command, args []string) {
 		os.Exit(-1)
 	}
 
+	if len(args) != 1 {
+		fmt.Printf("update file name not provided\n")
+		os.Exit(-1)
+	}
+
 	file := args[0]
 	fileBase := filepath.Base(file)
 	fi, err := os.Stat(file)
