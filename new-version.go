@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"hash"
@@ -59,8 +60,8 @@ func calculateHashes(filename string, pkg *types.Package) {
 
 	io.Copy(io.MultiWriter(writers...), in)
 
-	formatHash := func(hash hash.Hash) (out string) {
-		return fmt.Sprintf("%x", hash.Sum(nil))
+	formatHash := func(hash hash.Hash) string {
+		return base64.StdEncoding.EncodeToString(hash.Sum(nil))
 	}
 
 	pkg.Sha256Sum = formatHash(hashes[0])
