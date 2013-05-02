@@ -26,13 +26,13 @@ Takes a file path and some meta data and update the information used in the data
 	`,
 }
 
-var dryRun = cmdNewVersion.Flag.Bool("d", false, "dry run, print out the xml payload")
-var key = cmdNewVersion.Flag.String("k", "", "api key for the admin user")
+var versionD = cmdNewVersion.Flag.Bool("d", false, "dry run, print out the xml payload")
+var versionK = cmdNewVersion.Flag.String("k", "", "api key for the admin user")
 
-var appId = cmdNewVersion.Flag.String("a", "", "application id")
-var version = cmdNewVersion.Flag.String("v", "", "version ")
-var track = cmdNewVersion.Flag.String("t", "", "track")
-var path = cmdNewVersion.Flag.String("p", "", "url path")
+var versionA = cmdNewVersion.Flag.String("a", "", "application id")
+var versionV = cmdNewVersion.Flag.String("v", "", "version ")
+var versionT = cmdNewVersion.Flag.String("t", "", "track")
+var versionP = cmdNewVersion.Flag.String("p", "", "url path")
 
 func init() {
 	cmdNewVersion.Run = runNewVersion
@@ -69,12 +69,19 @@ func calculateHashes(filename string, pkg *types.Package) {
 }
 
 func runNewVersion(cmd *Command, args []string) {
-	if *dryRun == false && *key == "" {
+	dryRun := *versionD
+	key := *versionK
+	appId := *versionA
+	version := *versionV
+	track := *versionT
+	path := *versionP
+
+	if dryRun == false && key == "" {
 		fmt.Printf("key or dry-run required")
 		os.Exit(-1)
 	}
 
-	if *appId == "" || *version == "" || *track == "" || *path == "" {
+	if appId == "" || version == "" || track == "" || path == "" {
 		fmt.Printf("one of the required fields was not present\n")
 		os.Exit(-1)
 	}
@@ -94,8 +101,8 @@ func runNewVersion(cmd *Command, args []string) {
 
 	fileSize := strconv.FormatInt(fi.Size(), 10)
 
-	app := types.App{Id: *appId, Version: *version, Track: *track}
-	pkg := types.Package{Name: fileBase, Size: fileSize, Path: *path}
+	app := types.App{Id: appId, Version: version, Track: track}
+	pkg := types.Package{Name: fileBase, Size: fileSize, Path: path}
 	ver := types.Version{App: &app, Package: &pkg}
 	calculateHashes(file, ver.Package)
 
@@ -113,13 +120,13 @@ func runNewVersion(cmd *Command, args []string) {
 
 	req, _ := http.NewRequest("POST", adminURL.String(), bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "text/xml")
-	req.SetBasicAuth("admin", *key)
+	req.SetBasicAuth("admin", key)
 
-	if *dryRun || *debug {
+	if dryRun || *debug {
 		req.Write(os.Stdout)
 	}
 
-	if *dryRun {
+	if dryRun {
 		return
 	}
 

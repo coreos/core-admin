@@ -12,6 +12,7 @@ import (
 )
 
 var debug = flag.Bool("debug", false, "debug flag")
+var version string
 
 // A Command is an implementation of a core-admin command
 // like core-admin build or core-admin fix.
@@ -90,6 +91,15 @@ func main() {
 
 	if args[0] == "help" {
 		help(args[1:])
+		return
+	}
+
+	if args[0] == "version" {
+		if version == "" {
+			fmt.Println("unknown version!")
+			return
+		}
+		fmt.Println(version)
 		return
 	}
 
