@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./update/types"
+	"github.com/coreos/core-admin/update/types"
 	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"
