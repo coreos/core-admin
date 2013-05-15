@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitbucket.org/coreos/core-update/types"
+	"./update/types"
 	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"

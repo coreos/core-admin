@@ -1,5 +1,5 @@
 // Package types is where exportable API structures go. This is so we can share
-// the XML marshalling and unmarshalling with core-admin
+// the XML marshalling and unmarshalling with the services.
 package types
 
 import (
