@@ -7,7 +7,8 @@ import (
 )
 
 // Default URL for the update API, overriden with CORE_UPDATE_URL
-var updateURL = url.URL{Scheme: "https", Host: "core-update.appspot.com"}
+// TODO BP: use api.core-os.net instead but need to override CA certs
+var updateURL = url.URL{Scheme: "https", Host: "core-api.appspot.com"}
 
 func init() {
 	// Setup the updateURL if the environment variable is set
