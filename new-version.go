@@ -54,8 +54,7 @@ func calculateHashes(filename string, pkg *types.Package) {
 
 	in, err := os.Open(filename)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		panic(err)
 	}
 
 	io.Copy(io.MultiWriter(writers...), in)
@@ -77,26 +76,22 @@ func runNewVersion(cmd *Command, args []string) {
 	path := *versionP
 
 	if dryRun == false && key == "" {
-		fmt.Printf("key or dry-run required")
-		os.Exit(-1)
+		panic("key or dry-run required")
 	}
 
 	if appId == "" || version == "" || track == "" || path == "" {
-		fmt.Printf("one of the required fields was not present\n")
-		os.Exit(-1)
+		panic("one of the required fields was not present\n")
 	}
 
 	if len(args) != 1 {
-		fmt.Printf("update file name not provided\n")
-		os.Exit(-1)
+		panic("update file name not provided\n")
 	}
 
 	file := args[0]
 	fileBase := filepath.Base(file)
 	fi, err := os.Stat(file)
 	if err != nil {
-		fmt.Printf("%s\n", err.Error())
-		os.Exit(-1)
+		panic(err)
 	}
 
 	fileSize := strconv.FormatInt(fi.Size(), 10)
@@ -108,8 +103,7 @@ func runNewVersion(cmd *Command, args []string) {
 
 	raw, err := xml.MarshalIndent(ver, "", " ")
 	if err != nil {
-		fmt.Printf(err.Error())
-		os.Exit(-1)
+		panic(err)
 	}
 
 	body := []byte(xml.Header)
@@ -134,8 +128,7 @@ func runNewVersion(cmd *Command, args []string) {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		fmt.Printf(err.Error())
-		os.Exit(-1)
+		panic(err)
 	}
 
 	body, _ = ioutil.ReadAll(resp.Body)
@@ -143,8 +136,7 @@ func runNewVersion(cmd *Command, args []string) {
 	fmt.Printf("\n")
 
 	if resp.StatusCode != 200 {
-		fmt.Printf("Error: bad return code %s\n", resp.Status)
-		os.Exit(-1)
+		panic("Error: bad return code %s\n", resp.Status)
 	}
 
 	return
