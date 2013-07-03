@@ -4,7 +4,7 @@ package types
 
 import (
 	"encoding/xml"
-    "time"
+	"time"
 )
 
 type Version struct {
