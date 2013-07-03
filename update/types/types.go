@@ -19,7 +19,7 @@ type App struct {
 	Version  string    `xml:"version,attr"`
 	Track    string    `xml:"track,attr"`
 	Date     time.Time `xml:"-"`
-	IsActive time.Time `xml:"-"`
+	IsActive bool      `xml:"-"`
 }
 
 type Package struct {
