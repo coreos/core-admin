@@ -14,11 +14,12 @@ type Version struct {
 }
 
 type App struct {
-	XMLName xml.Name  `xml:"app"`
-	Id      string    `xml:"id,attr"`
-	Version string    `xml:"version,attr"`
-	Track   string    `xml:"track,attr"`
-	Date    time.Time `xml:"-"`
+	XMLName  xml.Name  `xml:"app"`
+	Id       string    `xml:"id,attr"`
+	Version  string    `xml:"version,attr"`
+	Track    string    `xml:"track,attr"`
+	Date     time.Time `xml:"-"`
+	IsActive bool      `xml:"-"`
 }
 
 type Package struct {
