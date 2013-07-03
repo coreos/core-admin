@@ -4,6 +4,7 @@ package types
 
 import (
 	"encoding/xml"
+	"time"
 )
 
 type Version struct {
@@ -13,10 +14,11 @@ type Version struct {
 }
 
 type App struct {
-	XMLName xml.Name `xml:"app"`
-	Id      string   `xml:"id,attr"`
-	Version string   `xml:"version,attr"`
-	Track   string   `xml:"track,attr"`
+	XMLName xml.Name  `xml:"app"`
+	Id      string    `xml:"id,attr"`
+	Version string    `xml:"version,attr"`
+	Track   string    `xml:"track,attr"`
+	Date    time.Time `xml:"-"`
 }
 
 type Package struct {
