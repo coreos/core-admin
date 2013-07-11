@@ -8,13 +8,13 @@ import (
 )
 
 type Version struct {
-	XMLName xml.Name `xml:"version" datastore:"-"`
+	XMLName xml.Name `xml:"version" datastore:"-" json:"-"`
 	App     *App     `xml:"app"`
 	Package *Package `xml:"package"`
 }
 
 type App struct {
-	XMLName  xml.Name  `xml:"app" datastore:"-"`
+	XMLName  xml.Name  `xml:"app" datastore:"-" json:"-"`
 	Id       string    `xml:"id,attr"`
 	Version  string    `xml:"version,attr"`
 	Track    string    `xml:"track,attr"`
@@ -23,7 +23,7 @@ type App struct {
 }
 
 type Package struct {
-	XMLName              xml.Name `xml:"package" datastore:"-"`
+	XMLName              xml.Name `xml:"package" datastore:"-" json:"-"`
 	Name                 string   `xml:"name,attr"`      // Package filename
 	Size                 string   `xml:"size,attr"`      // Size of the file (in bytes)
 	Path                 string   `xml:"path,attr"`      // Path from the root to the file
