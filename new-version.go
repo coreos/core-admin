@@ -129,7 +129,7 @@ func runNewVersion(cmd *Command, args []string) {
 
 	body := newVersionRequestBody(args)
 	adminURL, _ := url.Parse(updateURL.String())
-	adminURL.Path = "/admin/version"
+	adminURL.Path = "/admin/v1/version"
 
 	req, _ := http.NewRequest("POST", adminURL.String(), bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "text/xml")
