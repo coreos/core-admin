@@ -22,3 +22,10 @@ func init() {
 		updateURL = *envUrl
 	}
 }
+
+// Authentication Constants
+var scope = "https://www.googleapis.com/auth/appengine.admin"
+var pemFilePath = "secrets/key.pem"
+var clientSecretsPath = "secrets/client_secrets.json"
+
+var projectID = "core-api"
