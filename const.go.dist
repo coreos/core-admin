@@ -24,8 +24,7 @@ func init() {
 }
 
 // Authentication Constants
-var scope = "https://www.googleapis.com/auth/appengine.admin"
-var pemFilePath = "secrets/key.pem"
-var clientSecretsPath = "secrets/client_secrets.json"
-
-var projectID = "core-api"
+var scope =  "https://www.googleapis.com/auth/appengine.admin" 
+var clientId = "434611709510-gi24lp2o81agl978fi9ffub997c964pg.apps.googleusercontent.com" //OR ENTER YOUR OWN CLIENT ID
+var clientSecret = "YOUR CLIENT SECRET"
+var projectID = "core-api"//OR YOU OWN projectId
