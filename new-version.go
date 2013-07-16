@@ -20,7 +20,7 @@ import (
 )
 
 var cmdNewVersion = &Command{
-	UsageLine: "new-version -k [key] -a [app-id] -v [version] -t [track] -p [url path] [filename]",
+	UsageLine: "new-version -a [app-id] -v [version] -t [track] -p [url path] [filename]",
 	Short:     "update the version database for a given file",
 	Long: `
 Takes a file path and some meta data and update the information used in the datastore.
@@ -28,7 +28,6 @@ Takes a file path and some meta data and update the information used in the data
 }
 
 var versionD = cmdNewVersion.Flag.Bool("d", false, "dry run, print out the xml payload")
-var versionK = cmdNewVersion.Flag.String("k", "", "api key for the admin user")
 
 var versionA = cmdNewVersion.Flag.String("a", "", "application id")
 var versionV = cmdNewVersion.Flag.String("v", "", "version ")
@@ -88,6 +87,7 @@ func newVersionRequestBody(args []string) []byte {
 	metadata := *versionM
 
 	if appId == "" || version == "" || track == "" || path == "" || metadata == "" {
+		cmdNewVersion.Flag.Usage()
 		panic("one of the required fields was not present\n")
 	}
 
@@ -121,11 +121,6 @@ func newVersionRequestBody(args []string) []byte {
 
 func runNewVersion(cmd *Command, args []string) {
 	dryRun := *versionD
-	key := *versionK
-
-	if dryRun == false && key == "" {
-		panic("key or dry-run required")
-	}
 
 	body := newVersionRequestBody(args)
 	adminURL, _ := url.Parse(updateURL.String())
@@ -133,7 +128,15 @@ func runNewVersion(cmd *Command, args []string) {
 
 	req, _ := http.NewRequest("POST", adminURL.String(), bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "text/xml")
-	req.SetBasicAuth("admin", key)
+
+	// Oauth header info
+	token, err := NewToken(pemFilePath, clientSecretsPath, scope)
+	if err != nil {
+		panic(fmt.Sprintf("Error: Unable to grab Oauth token %s\n", err))
+	}
+	req.Header.Set("Authorization", "OAuth "+token.AccessToken)
+	req.Header.Set("x-goog-api-version", "2")
+	req.Header.Set("x-goog-project-id", projectID)
 
 	if dryRun || *debug {
 		req.Write(os.Stdout)
