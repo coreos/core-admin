@@ -143,7 +143,10 @@ func runNewVersion(cmd *Command, args []string) {
 		return
 	}
 
-	client := http.Client{}
+	client := &http.Client{
+		Transport: tlsTransport,
+	}
+	
 	resp, err := client.Do(req)
 
 	if err != nil {

@@ -66,6 +66,7 @@ func (c *Command) Runnable() bool {
 var commands = []*Command{
 	cmdHash,
 	cmdNewVersion,
+	cmdPing,
 }
 
 var exitStatus = 0
