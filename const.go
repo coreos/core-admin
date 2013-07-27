@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"crypto/tls"
 	"crypto/x509"
-	"io/ioutil"
 	"encoding/pem"
+	"github.com/coreos/core-admin/certs"
 )
 
 // Default URL for the update API, overriden with CORE_UPDATE_URL
@@ -17,8 +17,6 @@ var updateURL = url.URL{Scheme: "https", Host: "api.core-os.net"}
 var tlsTransport = &http.Transport {
 	DisableCompression: true,
 }
-var coreosInternetAuthPath = "./certs/CoreOS_Internet_Authority.pem"
-var coreosNetworkAuthPath = "./certs/CoreOS_Network_Authority.pem"
 
 func init() {
 	// Setup the updateURL if the environment variable is set
@@ -32,23 +30,14 @@ func init() {
 		updateURL = *envUrl
 	}
 	pool := x509.NewCertPool()
-	coreosInternetAuth, err := ioutil.ReadFile(coreosInternetAuthPath)
-	if err != nil {
-		fmt.Printf("Error: couldn't parse Coreos_Internet_Auth: %s", err.Error())
-		os.Exit(-1)
-	}
-	coreosNetworkAuth, err := ioutil.ReadFile(coreosNetworkAuthPath)
-	if err != nil {
-		fmt.Printf("Error: couldn't parse Coreos_Network_Auth: %s", err.Error())
-		os.Exit(-1)
-	}
-	coreosInetPemBlock, _ := pem.Decode(coreosInternetAuth)
+	
+	coreosInetPemBlock, _ := pem.Decode([]byte(certs.CoreOS_Internet_Authority_pem))
 	if coreosInetPemBlock == nil {
 		fmt.Printf("Error: No PEM data found in CoreOS_Internet_Auth")
 		os.Exit(-1)
 	}
 
-	coreosNetPemBlock, _ := pem.Decode(coreosNetworkAuth)
+	coreosNetPemBlock, _ := pem.Decode([]byte(certs.CoreOS_Internet_Authority_pem))
 	if coreosNetPemBlock == nil {
 		fmt.Printf("Error: No PEM data found in CoreOS_Network_Auth")
 		os.Exit(-1)

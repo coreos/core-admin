@@ -1,15 +1,16 @@
 package main
+
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
-	"io/ioutil"
 )
 
 var cmdPing = &Command{
 	UsageLine: "ping",
-	Short: "Test certs with a ping to c10n",
+	Short:     "Test certs with a ping to c10n",
 }
 
 func init() {

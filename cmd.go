@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"os"
-	"io"
 	"fmt"
+	"io"
+	"log"
+	"os"
 	"strings"
 	"sync"
-	"log"
 	"text/template"
 )
 

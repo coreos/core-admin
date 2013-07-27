@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/coreos/core-admin/update/types"
 	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -9,6 +8,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/coreos/core-admin/update/types"
 	"hash"
 	"io"
 	"io/ioutil"
@@ -42,11 +42,11 @@ func init() {
 
 func readMetadata(filename string, pkg *types.Package) {
 	metadata, err := ioutil.ReadFile(filename)
-	if (err != nil) {
+	if err != nil {
 		panic(err)
 	}
 	err = json.Unmarshal(metadata, pkg)
-	if (err != nil) {
+	if err != nil {
 		panic(err)
 	}
 }
@@ -146,7 +146,7 @@ func runNewVersion(cmd *Command, args []string) {
 	client := &http.Client{
 		Transport: tlsTransport,
 	}
-	
+
 	resp, err := client.Do(req)
 
 	if err != nil {
