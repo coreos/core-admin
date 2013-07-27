@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"os"
-	"io"
 	"fmt"
+	"io"
+	"log"
+	"os"
 	"strings"
 	"sync"
-	"log"
 	"text/template"
 )
 
@@ -66,6 +66,7 @@ func (c *Command) Runnable() bool {
 var commands = []*Command{
 	cmdHash,
 	cmdNewVersion,
+	cmdPing,
 }
 
 var exitStatus = 0
