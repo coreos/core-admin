@@ -1,4 +1,6 @@
-CoreOS backend administrative tools.
+# CoreOS backend administrative tools.
+
+[![Build Status](https://travis-ci.org/coreos/core-admin.png)](https://travis-ci.org/coreos/core-admin)
 
 ## Building
 
