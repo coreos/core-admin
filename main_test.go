@@ -11,6 +11,7 @@ func ExampleNewVersion() {
 	*versionT = "track"
 	*versionP = "/asdf/"
 	*versionM = "fixtures/update.metadata"
+	*versionC = true
 
 	args := []string{"README.md"}
 
