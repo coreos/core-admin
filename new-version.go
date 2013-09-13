@@ -35,6 +35,7 @@ var versionV = cmdNewVersion.Flag.String("v", "", "version ")
 var versionT = cmdNewVersion.Flag.String("t", "", "track")
 var versionP = cmdNewVersion.Flag.String("p", "", "url path")
 var versionM = cmdNewVersion.Flag.String("m", "", "metadata filename")
+var versionC = cmdNewVersion.Flag.Bool("c", false, "canary version")
 
 func init() {
 	cmdNewVersion.Run = runNewVersion
@@ -86,6 +87,7 @@ func newVersionRequestBody(args []string) []byte {
 	track := *versionT
 	path := *versionP
 	metadata := *versionM
+	canary := *versionC
 
 	if appId == "" || version == "" || track == "" || path == "" || metadata == "" {
 		panic("one of the required fields was not present\n")
@@ -104,7 +106,7 @@ func newVersionRequestBody(args []string) []byte {
 
 	fileSize := strconv.FormatInt(fi.Size(), 10)
 
-	app := types.App{Id: appId, Version: version, Track: track}
+	app := types.App{Id: appId, Version: version, Track: track, IsCanary: canary}
 	pkg := types.Package{Name: fileBase, Size: fileSize, Path: path}
 	ver := types.Version{App: &app, Package: &pkg}
 	calculateHashes(file, ver.Package)
