@@ -20,7 +20,7 @@ import (
 )
 
 var cmdNewVersion = &Command{
-	UsageLine: "new-version -k [key] -a [app-id] -v [version] -t [track] -p [url path] [filename]",
+	UsageLine: "new-version [-c] -k [key] -a [app-id] -v [version] -t [track] -p [url path] [filename]",
 	Short:     "update the version database for a given file",
 	Long: `
 Takes a file path and some meta data and update the information used in the datastore.
