@@ -20,7 +20,7 @@ type App struct {
 	Track    string    `xml:"track,attr"`
 	Date     time.Time `xml:"-"`
 	IsActive bool      `xml:"-"`
-	IsCanary bool      `xml:"canary,attr"`
+	IsCanary bool      `xml:"canary,attr,omitempty"`
 }
 
 type Package struct {
