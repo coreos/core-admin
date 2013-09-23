@@ -65,6 +65,7 @@ func (c *Command) Runnable() bool {
 // The order here is the order in which they are printed by 'core-admin help'.
 var commands = []*Command{
 	cmdHash,
+	cmdCanary,
 	cmdNewVersion,
 	cmdPing,
 }
