@@ -20,13 +20,6 @@ go build
 $ mkdir core-admin
 $ cd core-admin
 $ export GOPATH=`pwd`
-$ go get github.com/coreos/core-admin/...
-```
-
-# ...hack...hack..hack...
-
-```
-$ vim src/github.com/coreos/core-admin/update/types/types.go
 ```
 
 # rebuild ./bin/core-admin
